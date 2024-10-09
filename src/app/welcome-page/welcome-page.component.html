@@ -1,21 +1,24 @@
+
+  
 <div class="main-page">
-    <h1>
-      Welcome to CMDB!
-    </h1>
-    <button
-      mat-raised-button
-      (click)="openUserRegistrationDialog()"
-      style="margin-right: 10px;"
-      color="primary"
-    >
-      Sign Up
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="openUserLoginDialog()"
-      style="margin-right: 10px;"
-    >
-      Login
-    </button>
+  <img src="../../assets/images/cmdb-logo.png" alt="CMDB Logo" />
+   <h3>Welcome to CMDB!</h3>
+    <div class="button-container">
+      <button
+      class="custom-button"
+        mat-raised-button
+        (click)="openUserRegistrationDialog()"
+        
+      >
+        Sign Up
+      </button>
+      <button
+      class="custom-button"
+        mat-raised-button
+        (click)="openUserLoginDialog()"
+       
+      >
+        Login
+      </button>
+    </div>
   </div>
