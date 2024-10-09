@@ -10,22 +10,28 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 // This import is used to display notifications back to the user
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.scss'
+  styleUrls: ['./login-form.component.scss'] // Fixed from styleUrl to styleUrls
 })
-export class LoginFormComponent  implements OnInit {
+export class LoginFormComponent implements OnInit {
 
-  @Input() userData = { username: '', password: ''};
+  @Input() userData = { username: '', password: '' };
 
-constructor(
+  constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<LoginFormComponent>,
-    public snackBar: MatSnackBar) { }
+    public snackBar: MatSnackBar,
+    private router: Router // Fixed the constructor parentheses
+  ) { }
 
-ngOnInit(): void {
-}
+  ngOnInit(): void {
+  }
+
+
 
 // This is the function responsible for sending the form inputs to the backend
 loginUser(): void {
@@ -36,15 +42,20 @@ loginUser(): void {
    // Log the values to check if they were set correctly
    console.log("User saved in localStorage:", JSON.parse(localStorage.getItem("user") || '{}'));
    console.log("Token saved in localStorage:", localStorage.getItem("token"));
-     this.dialogRef.close(); // This will close the modal on success!
-     this.snackBar.open("You are logged in!", 'OK', {
+
+   this.dialogRef.close(); // This will close the modal on success!
+
+   this.snackBar.open("You are logged in!", 'OK', {
         duration: 3000
      });
-    }, (result) => {
+
+     this.router.navigate(['movies']);
+
+    }, (error) => {
       this.snackBar.open("Login unsuccessful, please try again!", 'OK', {
         duration: 3000
       });
     });
   }
 
-  }
+}

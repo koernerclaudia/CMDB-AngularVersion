@@ -1,9 +1,5 @@
 // src/app/app.component.ts
 import { Component } from '@angular/core';
-import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
-import { LoginFormComponent } from './login-form/login-form.component';
-import { MatDialog } from '@angular/material/dialog';
-// import { MovieCardComponent } from './movie-card/movie-card.component';
 
 @Component({
   selector: 'app-root',
@@ -11,27 +7,5 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'CMDB-Angular';
-
-  constructor(public dialog: MatDialog) { }
-// This is the function that will open the dialog when the signup button is clicked  
-openUserRegistrationDialog(): void {
-    this.dialog.open(UserRegistrationFormComponent, {
-// Assigning the dialog a width
-    width: '280px'
-    });
-  }
-
-  openLoginDialog(): void {
-    this.dialog.open(LoginFormComponent, {
-      // Assigning the dialog a width
-      width: '280px'
-    });
-  }
-
-  // openMoviesDialog(): void {
-  //   this.dialog.open(MovieCardComponent, {
-  //     width: '500px'
-  //   });
-  // }
+  title = 'CMDB - Movie Database';
 }
