@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
-// import { HttpClientModule } from '@angular/common/http';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,23 +15,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButton } from '@angular/material/button';
 
-import { FormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+// simplified API for Angular applications that makes it possible for the client app to communicate with the API or server-side
 
 import { UserRegistrationFormComponent } from './user-registration-form/user-registration-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
-
+import { GenreInfoComponent } from './genre-info/genre-info.component';
+import { DirectorInfoComponent } from './director-info/director-info.component';
+import { MovieDetailsComponent } from './movie-details/movie-details.component';
+// import { UserProfileComponent } from './user-profile/user-profile.component';
+import { NavBarComponent } from './navbar/navbar.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
-  // { path: 'profile', component: UserRegistrationFormComponent },
+  // { path: 'profile', component: UserProfileComponent },
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 
@@ -40,32 +43,34 @@ const appRoutes: Routes = [
     LoginFormComponent,
     MovieCardComponent,
     WelcomePageComponent,
+    GenreInfoComponent,
+    DirectorInfoComponent,
+    MovieDetailsComponent,
+    // UserProfileComponent,
+    NavBarComponent,
+    UpdateProfileComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 
+  exports: [RouterModule], // This fixed my 'router-outlet' is not a known element: error
   imports: [
     BrowserModule,
     AppRoutingModule,
-    // HttpClientModule,
-    MatButtonModule,
-    MatInputModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatSnackBarModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatButton,
+    MatDialogModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatIconModule,
     RouterModule.forRoot(appRoutes),
-    MatIconModule
   ],
-  providers: [
-    provideClientHydration(),
-    provideHttpClient(withFetch()),
-    provideAnimationsAsync('noop'),
-    provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
