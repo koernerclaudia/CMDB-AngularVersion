@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -25,14 +25,14 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { GenreInfoComponent } from './genre-info/genre-info.component';
 import { DirectorInfoComponent } from './director-info/director-info.component';
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
-// import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { NavBarComponent } from './navbar/navbar.component';
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
+
 
 const appRoutes: Routes = [
   { path: 'welcome', component: WelcomePageComponent },
   { path: 'movies', component: MovieCardComponent },
-  // { path: 'profile', component: UserProfileComponent },
+  { path: 'profile', component: UserProfileComponent },
   { path: '', redirectTo: 'welcome', pathMatch: 'prefix' },
 ];
 
@@ -46,9 +46,8 @@ const appRoutes: Routes = [
     GenreInfoComponent,
     DirectorInfoComponent,
     MovieDetailsComponent,
-    // UserProfileComponent,
     NavBarComponent,
-    UpdateProfileComponent,
+    UserProfileComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -69,6 +68,7 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatIconModule,
     RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

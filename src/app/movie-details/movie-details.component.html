@@ -1,7 +1,4 @@
-<!-- 
-	This component shows more details about the movie itself including a description, director, and genre
- -->
- <h1>{{data.title}}</h1>
- <p>{{data.description}}</p>
- <p>Directed by: {{data.director}}</p>
- <p>Genre: {{data.genre}}</p>
+<div style="text-align: center; margin: 20px;">
+	<p>{{data.Description}}</p> 
+	<button mat-button color="primary" (click)="closeDialog()">Close</button>
+  </div>

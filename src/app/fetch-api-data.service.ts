@@ -1,12 +1,12 @@
+
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // Declaring the api url that will provide data for the client app
 const apiUrl = 'https://cmdb-b8f3cd58963f.herokuapp.com/';
-
-
 
 @Injectable({
   providedIn: 'root',
@@ -14,14 +14,6 @@ const apiUrl = 'https://cmdb-b8f3cd58963f.herokuapp.com/';
 export class FetchApiDataService {
   constructor(private http: HttpClient) {}
 
-  getGenre(genreType: string): Observable<any> {
-    const token = localStorage.getItem('token'); // assuming token is stored in localStorage
-    return this.http.get('${this.apiUrl}/${genreType}', {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      })
-    });
-  }
 
   // User Registration
   public userRegistration(userDetails: any): Observable<any> {
@@ -80,6 +72,22 @@ export class FetchApiDataService {
       .pipe(catchError(this.handleError));
   }
 
+
+//   // Add movie to favorites
+// addMovieToFavorites(username: string, movieId: string): Observable<any> {
+//   const token = localStorage.getItem('token');
+//   return this.httpClient.post<any>(
+//     `${this.apiUrl}/${username}/movies/${movieId}`,
+//     {},
+//     {
+//       headers: new HttpHeaders({
+//         Authorization: `Bearer ${token}`,
+//         'Content-Type': 'application/json'
+//       })
+//     }
+//   );
+// }
+
     // Get User's Favorite Movies
     public getUserFavoriteMovies(username: string): Observable<any> {
       const token = localStorage.getItem('token');
@@ -99,6 +107,22 @@ export class FetchApiDataService {
       })
       .pipe(catchError(this.handleError));
   }
+
+
+  // removeMovieFromFavorites(username: string, movieId: string): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   return this.httpClient.delete<any>(
+  //     `${this.apiUrl}/${username}/movies/${movieId}`,
+  //     {
+  //       headers: new HttpHeaders({
+  //         Authorization: `Bearer ${token}`,
+  //         'Content-Type': 'application/json'
+  //       })
+  //     }
+  //   );
+  // }
+
+
 
   // Get All Movies (with optional filters)
   public getAllMovies(genre?: string, actor?: string): Observable<any> {
@@ -123,15 +147,13 @@ export class FetchApiDataService {
       .pipe(catchError(this.handleError));
   }
 
-  // // Get Genre Info by Genre Type
-  // public getGenreInfo(genreType: string): Observable<any> {
-  //   const token = localStorage.getItem('token');
-  //   return this.http
-  //     .get(apiUrl + 'movies/genres/' + genreType, { headers: new HttpHeaders({ Authorization: 'Bearer ' + token }) })
-  //     .pipe(catchError(this.handleError));
-  // }
-
- 
+  // Get Genre Info by Genre Type
+  public getGenreInfo(genreType: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http
+      .get(apiUrl + 'movies/genres/' + genreType, { headers: new HttpHeaders({ Authorization: 'Bearer ' + token }) })
+      .pipe(catchError(this.handleError));
+  }
 
   // Get Director Info by Director Name
   public getDirectorInfo(directorName: string): Observable<any> {
@@ -153,7 +175,6 @@ export class FetchApiDataService {
     return throwError('Something bad happened; please try again later.');
   }
 
-  
 }
 
 
@@ -162,13 +183,7 @@ export class FetchApiDataService {
 
 
 
-
-
-
-
-
-
-
+// old code
 
 
 

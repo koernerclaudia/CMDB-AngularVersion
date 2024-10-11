@@ -1,15 +1,7 @@
-<mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ genre?.Type }}</mat-card-title> <!-- Safe navigation operator in case genre is not defined yet -->
-    </mat-card-header>
-    
-    <mat-card-content>
-      <p>{{ genre?.Description }}</p> <!-- Use <p> to wrap text -->
-      <button mat-button (click)="closeDialog()">Close</button> <!-- Add mat-button directive for Material styling -->
-    </mat-card-content>
-    
-    <mat-card-actions>
-      <!-- Add actions here if needed -->
-    </mat-card-actions>
-  </mat-card>
-  
+
+<div style="text-align: center; margin: 20px;">
+  <h2>{{ data.Name }}</h2>
+  <p>{{ data.Description }}</p>
+
+  <button mat-button color="primary" (click)="closeDialog()">Close</button>
+</div>

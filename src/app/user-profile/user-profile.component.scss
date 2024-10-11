@@ -1,24 +1,23 @@
-.profile {
-    text-align: center;
-    align-items: center;
-    display: block;
-    max-width: 1400px;
-  }
-  
-  mat-card-header {
-    text-align: center;
-    display: block;
-  }
-  
-  img {
-    max-width: 300px;
-    min-width: 300px;
-    border-radius: 10px;
-  }
-  
-  .favorite_cards {
-    display: flex;
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @media(min-width: 760px) {
     flex-direction: row;
-    overflow: scroll;
+    justify-content: space-between;
   }
-  
+
+  .user-info, .user-form {
+    flex: 1;
+    margin: 16px;
+  }
+
+  .user-favourites {
+    margin-top: 16px;
+  }
+
+  .movie-card {
+    margin: 8px 0;
+  }
+}

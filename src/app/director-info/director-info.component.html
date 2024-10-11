@@ -1,9 +1,7 @@
-<!-- 
-	This component shows more information about the movies' director in a dialog boxx
- -->
- <h1>{{data.name}}</h1>
 
- <img src={{data.image}} alt="image of {{data.name}}">
- 
- <p>{{data.bio}}</p>
- 
+<div style="text-align: center; margin: 20px;">
+	<h2>{{ data.Name }}</h2>
+	<p>{{ data.Birthyear }}</p>
+  
+	<button mat-button color="primary" (click)="closeDialog()">Close</button>
+  </div>
