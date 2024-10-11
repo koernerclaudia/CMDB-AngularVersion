@@ -1,21 +1,22 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
-  styleUrls: ['./movie-details.component.scss'],
+  styleUrls: ['./movie-details.component.scss']
 })
-export class MovieDetailsComponent implements OnInit {
+export class MovieDetailsComponent {
+  movie: any;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      title: string;
-      description: string;
-      director: string;
-      genre: string;
-    }
+    @Inject(MAT_DIALOG_DATA) public data: { Name: string; Description: string },  // Receive genre data
+    public dialogRef: MatDialogRef<MovieDetailsComponent>
   ) {}
 
-  ngOnInit(): void {}
+
+  // Function to close the dialog
+  closeDialog(): void {
+    this.dialogRef.close()
+  }
 }

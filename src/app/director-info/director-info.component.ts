@@ -1,22 +1,21 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-director-info',
   templateUrl: './director-info.component.html',
-  styleUrls: ['./director-info.component.scss'],
+  styleUrls: ['./director-info.component.scss']
 })
-export class DirectorInfoComponent implements OnInit {
+export class DirectorInfoComponent {
+
   constructor(
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      name: string;
-      image: string;
-      bio: string;
-      birth: Date;
-      death: Date;
-    }
+    @Inject(MAT_DIALOG_DATA) public data: { Name: string; Birthyear: string },  // Receive genre data
+    public dialogRef: MatDialogRef<DirectorInfoComponent>
   ) {}
 
-  ngOnInit(): void {}
+  // Function to close the dialog
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
 }
+
