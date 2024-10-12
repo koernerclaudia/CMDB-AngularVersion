@@ -117,6 +117,7 @@ export class MovieCardComponent implements OnInit {
       if (index > -1) {
         this.favoriteMovies.splice(index, 1);
         this.updateLocalStorageFavorites(); // Sync local storage
+        console.log('Movie removed from favorites:', response);
       }
     });
   }
@@ -129,39 +130,4 @@ export class MovieCardComponent implements OnInit {
   }
 }
 
-
-
-  //================================================================================================
-
-
-  // ngOnInit(): void {
-  //   this.getMovies();
-  //   this.loadFavoritesFromLocalStorage(); // Load favorites from local storage
-  // }
-
-
-  // // Load favorite movies from local storage
-  // loadFavoritesFromLocalStorage(): void {
-  //   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-  //   this.favoriteMovies = storedUser.FavoriteMovies || [];
-  // }
-
-
-
-
-  // // Update local storage with the latest favorite movies list
-  // updateLocalStorageFavorites(): void {
-  //   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-  //   storedUser.FavoriteMovies = this.favoriteMovies;
-  //   localStorage.setItem('user', JSON.stringify(storedUser));
-  // }
-
-  //   // Toggle favorite status of a movie
-  // toggleFavorite(movieId: string): void {
-  //   if (this.isFavorite(movieId)) {
-  //     this.removeFromFavorites(movieId);
-  //   } else {
-  //     this.addMovieToFavorites(movieId);
-  //   }
-  // }
 

@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./movie-details.component.scss']
 })
 export class MovieDetailsComponent {
-  movie: any;
+
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { Title: string; Description: string },  // Receive title and description

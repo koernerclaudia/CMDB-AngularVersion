@@ -52,11 +52,9 @@ export class FetchApiDataService {
       .pipe(catchError(this.handleError));
   }
 
-  // Delete User by Username
-  public deleteUser(username: string): Observable<any> {
-    const token = localStorage.getItem('token');
+  public deleteUser(username: string, token: string): Observable<any> {
     return this.http
-      .delete(apiUrl + 'users/' + username, {
+      .delete(`${apiUrl}/users/${username}`, {
         headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
       })
       .pipe(catchError(this.handleError));
@@ -71,22 +69,6 @@ public addMovieToFavorites(username: string, MovieID: string): Observable<any> {
     })
     .pipe(catchError(this.handleError));
 }
-
-
-//   // Add movie to favorites
-// addMovieToFavorites(username: string, movieId: string): Observable<any> {
-//   const token = localStorage.getItem('token');
-//   return this.httpClient.post<any>(
-//     `${this.apiUrl}/${username}/movies/${movieId}`,
-//     {},
-//     {
-//       headers: new HttpHeaders({
-//         Authorization: `Bearer ${token}`,
-//         'Content-Type': 'application/json'
-//       })
-//     }
-//   );
-// }
 
     // Get User's Favorite Movies
     public getUserFavoriteMovies(username: string): Observable<any> {
@@ -107,22 +89,6 @@ public removeMovieFromFavorites(username: string, MovieID: string): Observable<a
     })
     .pipe(catchError(this.handleError));
 }
-
-
-  // removeMovieFromFavorites(username: string, movieId: string): Observable<any> {
-  //   const token = localStorage.getItem('token');
-  //   return this.httpClient.delete<any>(
-  //     `${this.apiUrl}/${username}/movies/${movieId}`,
-  //     {
-  //       headers: new HttpHeaders({
-  //         Authorization: `Bearer ${token}`,
-  //         'Content-Type': 'application/json'
-  //       })
-  //     }
-  //   );
-  // }
-
-
 
   // Get All Movies (with optional filters)
   public getAllMovies(genre?: string, actor?: string): Observable<any> {
@@ -146,6 +112,7 @@ public removeMovieFromFavorites(username: string, MovieID: string): Observable<a
       .get(apiUrl + 'movies/' + title, { headers: new HttpHeaders({ Authorization: 'Bearer ' + token }) })
       .pipe(catchError(this.handleError));
   }
+
 
   // Get Genre Info by Genre Type
   public getGenreInfo(genreType: string): Observable<any> {
