@@ -1,6 +1,7 @@
 <app-nav-bar></app-nav-bar>
+
 <div class="row">
-    <!-- Part 1: Profile Information -->
+    <!-- Part 1: Profile Information  -->
     <div class="col-12 col-md-6 mt-3">
       <mat-card class="bg-dark text-white">
         <mat-card-title>Profile Information</mat-card-title>
@@ -11,7 +12,7 @@
       </mat-card>
     </div>
   
-    <!-- Part 2: Change Profile Information -->
+     <!-- Part 2: Change Profile Information -->
     <div class="col-12 col-md-6 mt-3">
       <mat-card class="bg-dark text-white">
         <mat-card-title>Change Your Info</mat-card-title>
@@ -42,7 +43,8 @@
   <!-- Part 3: Favorite Movies -->
   <mat-card class="bg-dark text-white mt-3">
     <mat-card-title>Favorite Movies</mat-card-title>
-    <div *ngIf="favoriteMovies.length > 0; else noFavorites">
+    <!-- <div *ngIf="favoriteMovies.length > 0; else noFavorites"> -->
+      <div *ngIf="isFavorite ; else noFavorites">
       <div *ngFor="let movie of favoriteMovies" class="movie-card mt-3">
         <mat-card class="d-flex justify-content-between align-items-center">
           <img [src]="movie.ImageURL" class="movie-image" />

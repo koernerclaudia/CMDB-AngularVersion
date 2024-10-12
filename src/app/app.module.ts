@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTooltipModule } from '@angular/material/tooltip'; // Import MatTooltipModule
+
 
 // simplified API for Angular applications that makes it possible for the client app to communicate with the API or server-side
 
@@ -59,7 +62,6 @@ const appRoutes: Routes = [
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
-    BrowserAnimationsModule,
     MatDialogModule,
     MatInputModule,
     MatButtonModule,
@@ -68,9 +70,16 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatIconModule,
     RouterModule.forRoot(appRoutes),
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTooltipModule,
   ],
-  providers: [],
+  providers: [
+    provideHttpClient(
+      withFetch() // Enable fetch APIs
+    ),
+  ],
   bootstrap: [AppComponent],
 })
+
+
 export class AppModule {}

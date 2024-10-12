@@ -10,11 +10,12 @@ export class MovieDetailsComponent {
   movie: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { Name: string; Description: string },  // Receive genre data
+    @Inject(MAT_DIALOG_DATA) public data: { Title: string; Description: string },  // Receive title and description
     public dialogRef: MatDialogRef<MovieDetailsComponent>
-  ) {}
-
-
+  ) {
+    console.log('Dialog Data:', data); // Log the data to the console
+  }
+  
   // Function to close the dialog
   closeDialog(): void {
     this.dialogRef.close()

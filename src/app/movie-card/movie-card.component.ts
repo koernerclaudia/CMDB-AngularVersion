@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatDialog } from '@angular/material/dialog'; // Import MatDialog
 import { GenreInfoComponent } from '../genre-info/genre-info.component'; // Import the GenreInfoComponent
-import { DirectorInfoComponent } from '../director-info/director-info.component'; // Import the GenreInfoComponent
+import { DirectorInfoComponent } from '../director-info/director-info.component'; // Import the DirectorInfoComponent
 import { MovieDetailsComponent } from '../movie-details/movie-details.component';
 
 @Component({
@@ -21,8 +21,9 @@ export class MovieCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadFavoritesFromLocalStorage();
     this.getMovies();
-    this.loadFavoritesFromLocalStorage(); // Load favorites from local storage
+    this.loadUserFavorites(); // Load favorites from the API
   }
 
   getMovies(): void {
@@ -33,42 +34,19 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
-  // Load user's favorite movies from local storage
+  // Load favorite movies from local storage
   loadFavoritesFromLocalStorage(): void {
     const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
     this.favoriteMovies = storedUser.FavoriteMovies || [];
   }
 
-  // Check if a movie is in the user's list of favorite movies
-  isFavorite(movieId: string): boolean {
-    return this.favoriteMovies.includes(movieId);
-  }
-
-  // Add a movie to the user's favorites
-  addToFavorites(movieId: string): void {
-    this.fetchApiData.addMovieToFavorites(this.user.username, movieId).subscribe((response: any) => {
-      this.favoriteMovies.push(movieId);
-      // this.updateLocalStorageFavorites(); // Update local storage
-    });
-  }
-
-  // Remove a movie from the user's favorites
-  removeFromFavorites(movieId: string): void {
-    this.fetchApiData.removeMovieFromFavorites(this.user.username, movieId).subscribe((response: any) => {
-      const index = this.favoriteMovies.indexOf(movieId);
-      if (index > -1) {
-        this.favoriteMovies.splice(index, 1);
-      }
-      // this.updateLocalStorageFavorites(); // Update local storage
-    });
-  }
-
-  // Toggle favorite status of a movie
-  toggleFavorite(movieId: string): void {
-    if (this.isFavorite(movieId)) {
-      this.removeFromFavorites(movieId);
-    } else {
-      this.addToFavorites(movieId);
+  // Load user's favorite movies from the API
+  loadUserFavorites(): void {
+    if (this.user.username) {
+      this.fetchApiData.getUserFavoriteMovies(this.user.username).subscribe((resp: any) => {
+        this.favoriteMovies = resp; // Assuming the response is an array of movie IDs
+        this.updateLocalStorageFavorites(); // Sync local storage
+      });
     }
   }
 
@@ -94,13 +72,96 @@ export class MovieCardComponent implements OnInit {
   }
 
   openSynopsisDialog(movie: any): void {
+    console.log('Movie Data:', movie);  // Log the movie object
     this.dialog.open(MovieDetailsComponent, {
       data: {
-        Description:movie.Description        
+        Title: movie.Title,  // Pass the title
+        Description: movie.Description  // Pass the description
       },
       width: '500px'
     });
   }
 
+  // Toggle favorite status of a movie
+  toggleFavorite(movieId: string): void {
+    if (this.isFavorite(movieId)) {
+      this.removeFromFavorites(movieId);
+    } else {
+      this.addMovieToFavorites(movieId);
+    }
+  }
 
+  // Check if a movie is in the user's list of favorite movies
+  isFavorite(movieId: string): boolean {
+    return this.favoriteMovies.includes(movieId);
+  }
+
+  // Add a movie to the user's favorites
+  addMovieToFavorites(movieId: string): void {
+    if (!this.favoriteMovies.includes(movieId)) {
+      this.favoriteMovies.push(movieId);
+      // Call the API to add the movie to favorites
+      this.fetchApiData.addMovieToFavorites(this.user.username, movieId).subscribe((response: any) => {
+        console.log('Movie added to favorites:', response);
+        this.updateLocalStorageFavorites(); // Sync local storage
+      }, (error: any) => {
+        console.error('Error adding movie to favorites:', error);
+      });
+    }
+  }
+
+  // Remove a movie from the user's favorites
+  removeFromFavorites(movieId: string): void {
+    this.fetchApiData.removeMovieFromFavorites(this.user.username, movieId).subscribe((response: any) => {
+      const index = this.favoriteMovies.indexOf(movieId);
+      if (index > -1) {
+        this.favoriteMovies.splice(index, 1);
+        this.updateLocalStorageFavorites(); // Sync local storage
+      }
+    });
+  }
+
+  // Update local storage with current favorites
+  updateLocalStorageFavorites(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    user.FavoriteMovies = this.favoriteMovies;
+    localStorage.setItem('user', JSON.stringify(user));
+  }
 }
+
+
+
+  //================================================================================================
+
+
+  // ngOnInit(): void {
+  //   this.getMovies();
+  //   this.loadFavoritesFromLocalStorage(); // Load favorites from local storage
+  // }
+
+
+  // // Load favorite movies from local storage
+  // loadFavoritesFromLocalStorage(): void {
+  //   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  //   this.favoriteMovies = storedUser.FavoriteMovies || [];
+  // }
+
+
+
+
+  // // Update local storage with the latest favorite movies list
+  // updateLocalStorageFavorites(): void {
+  //   const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+  //   storedUser.FavoriteMovies = this.favoriteMovies;
+  //   localStorage.setItem('user', JSON.stringify(storedUser));
+  // }
+
+  //   // Toggle favorite status of a movie
+  // toggleFavorite(movieId: string): void {
+  //   if (this.isFavorite(movieId)) {
+  //     this.removeFromFavorites(movieId);
+  //   } else {
+  //     this.addMovieToFavorites(movieId);
+  //   }
+  // }
+
