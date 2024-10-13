@@ -71,16 +71,28 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens a dialog to display movie synopsis about movie selected.
+   * @param movie - The movie object.
+   */
+
   openSynopsisDialog(movie: any): void {
-    console.log('Movie Data:', movie);  // Log the movie object
     this.dialog.open(MovieDetailsComponent, {
-      data: {
-        Title: movie.Title,  // Pass the title
-        Description: movie.Description  // Pass the description
-      },
-      width: '500px'
+      data: { movie },
+      width: '600px',
     });
   }
+
+  // openSynopsisDialog(movie: any): void {
+  //   console.log('Movie Data:', movie);  // Log the movie object
+  //   this.dialog.open(MovieDetailsComponent, {
+  //     data: {
+  //       Name: movie.Title,  // Pass the title
+  //       Description: movie.Description  // Pass the description
+  //     },
+  //     width: '500px'
+  //   });
+  // }
 
   // Toggle favorite status of a movie
   toggleFavorite(movieId: string): void {
