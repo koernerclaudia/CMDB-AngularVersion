@@ -70,15 +70,15 @@ public addMovieToFavorites(username: string, MovieID: string): Observable<any> {
     .pipe(catchError(this.handleError));
 }
 
-    // Get User's Favorite Movies
-    public getUserFavoriteMovies(username: string): Observable<any> {
-      const token = localStorage.getItem('token');
-      return this.http
-        .get(apiUrl + `users/${username}/movies`, {
-          headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
-        })
-        .pipe(catchError(this.handleError));
-    }
+  // Get User's Favorite Movies
+  public getUserFavoriteMovies(username: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http
+      .get(apiUrl + `users/${username}/movies`, {
+        headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
+      })
+      .pipe(catchError(this.handleError));
+  }
 
 // Remove a movie from a user's list of favorites
 public removeMovieFromFavorites(username: string, MovieID: string): Observable<any> {

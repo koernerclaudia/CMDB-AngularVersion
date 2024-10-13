@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar'; // For notifications
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FetchApiDataService } from '../fetch-api-data.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -12,11 +13,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class UserProfileComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   movies: any[] = []; // Fetched movie list
-  favoriteMovies: any[] = [];
+  FavoriteMovies: any[] = [];
   userForm: FormGroup;
+  username: string = '';
   token: string = localStorage.getItem('token') || '';
 
   constructor(
+    public fetchApiData: FetchApiDataService, 
     private fb: FormBuilder,
     private http: HttpClient,
     private snackBar: MatSnackBar,
@@ -30,22 +33,47 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getFavoriteMovies();
-    this.updateLocalStorageFavorites
+    this.getMovies();
+    this.loadUserFavorites(); // Load user's favorite movies
+
+    // this.getUserFavoriteMovies();
+    // this.updateLocalStorageFavorites();
   }
 
-  // Fetch favorite movies from movies array
-  getFavoriteMovies() {
-    if (!this.user || !this.movies.length) return;
-    this.favoriteMovies = this.movies.filter((movie) =>
-      this.user.FavoriteMovies.includes(movie._id)
+  
+
+   // Fetch all movies
+   getMovies(): void {
+    this.fetchApiData.getAllMovies().subscribe((resp: any) => {
+      this.movies = resp; // Store all movies
+      console.log('All Movies:', this.movies); // Debugging log
+    });
+  }
+
+  // Load user's favorite movies from the API
+  loadUserFavorites(): void {
+    if (this.user.username) {
+      this.fetchApiData.getUserFavoriteMovies(this.user.username).subscribe((resp: any) => {
+        this.FavoriteMovies = resp; // Assuming response is an array of movie IDs
+        console.log('User Favorite Movies:', this.FavoriteMovies); // Debugging log
+        this.filterFavoriteMovies(); // Filter movies based on favorites
+      });
+    }
+  }
+
+  // Filter movies to display only the user's favorites
+  filterFavoriteMovies(): void {
+    this.FavoriteMovies = this.movies.filter(movie => 
+      this.FavoriteMovies.includes(movie._id)
     );
   }
 
-    updateLocalStorageFavorites(): void {
-    const updatedUser = { ...this.user, FavoriteMovies: this.favoriteMovies };
-    localStorage.setItem('user', JSON.stringify(updatedUser));
-  }
+
+
+  //   updateLocalStorageFavorites(): void {
+  //   const updatedUser = { ...this.user, FavoriteMovies: this.FavoriteMovies };
+  //   localStorage.setItem('user', JSON.stringify(updatedUser));
+  // }
 
   // Update user profile
   updateProfile() {
@@ -108,7 +136,7 @@ export class UserProfileComponent implements OnInit {
       )
       .subscribe(
         (response) => {
-          this.favoriteMovies = this.favoriteMovies.filter(
+          this.FavoriteMovies = this.FavoriteMovies.filter(
             (movie) => movie._id !== movieId
           );
           this.snackBar.open('Movie removed from favorites.', 'Close', {
