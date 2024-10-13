@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar'; // For notifications
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { FetchApiDataService } from '../fetch-api-data.service'; // Import your FetchApiDataService
 
 @Component({
   selector: 'app-user-profile',
@@ -12,17 +11,16 @@ import { FetchApiDataService } from '../fetch-api-data.service'; // Import your 
 })
 export class UserProfileComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
+  movies: any[] = []; // Fetched movie list
   favoriteMovies: any[] = [];
   userForm: FormGroup;
-  token: string = '';
-  movies: any[] = [];
+  token: string = localStorage.getItem('token') || '';
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private snackBar: MatSnackBar,
-    private router: Router,
-    private fetchApiData: FetchApiDataService // Inject your service here
+    private router: Router
   ) {
     this.userForm = this.fb.group({
       username: [this.user.username, Validators.required],
@@ -32,30 +30,22 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      this.user = JSON.parse(userData);
-      this.userForm.patchValue({
-        username: this.user.username,
-        email: this.user.email,
-      });
-    }
-    this.token = localStorage.getItem('token') || '';
     this.getFavoriteMovies();
+    this.updateLocalStorageFavorites
   }
 
-  getFavoriteMovies(): void {
-    this.fetchApiData.getUserFavoriteMovies(this.user.username).subscribe(
-      (resp: any) => {
-        console.log('Favorite Movies:', resp); // Log the response
-        this.favoriteMovies = resp;
-      },
-      (error: any) => {
-        console.error('Error fetching favorite movies:', error);
-      }
+  // Fetch favorite movies from movies array
+  getFavoriteMovies() {
+    if (!this.user || !this.movies.length) return;
+    this.favoriteMovies = this.movies.filter((movie) =>
+      this.user.FavoriteMovies.includes(movie._id)
     );
   }
 
+    updateLocalStorageFavorites(): void {
+    const updatedUser = { ...this.user, FavoriteMovies: this.favoriteMovies };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  }
 
   // Update user profile
   updateProfile() {
@@ -105,44 +95,62 @@ export class UserProfileComponent implements OnInit {
       );
   }
 
-  // deleteAccount(username: string, token: string): void {
-  //   if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-  //     this.fetchApiData.deleteUser(username, token).subscribe(
-  //       response => {
-  //         alert("Account deleted successfully.");
-  //         this.handleLogout();
-  //         window.location.href = "/signup";
-  //       },
-  //       error => {
-  //         console.error("Error:", error);
-  //         alert("An error occurred. Please try again.");
-  //       }
-  //     );
-  //   }
-  // }
+  // Remove movie from favorites
+  removeFavorite(movieId: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
 
-  // handleLogout(): void {
-  //   // Implement logout logic here
-  // }
+    this.http
+      .delete(
+        `https://cmdb-b8f3cd58963f.herokuapp.com/users/${this.user.username}/movies/${movieId}`,
+        { headers }
+      )
+      .subscribe(
+        (response) => {
+          this.favoriteMovies = this.favoriteMovies.filter(
+            (movie) => movie._id !== movieId
+          );
+          this.snackBar.open('Movie removed from favorites.', 'Close', {
+            duration: 3000,
+          });
+        },
+        (error) => {
+          console.error(error);
+          this.snackBar.open('Failed to remove movie.', 'Close', {
+            duration: 3000,
+          });
+        }
+      );
+  }
+
+  // Deregister account
+  deleteAccount() {
+    if (confirm('Are you sure you want to delete your account?')) {
+      const headers = new HttpHeaders({
+        Authorization: `Bearer ${this.token}`,
+      });
+
+      this.http
+        .delete(
+          `https://cmdb-b8f3cd58963f.herokuapp.com/users/${this.user.username}`,
+          { headers }
+        )
+        .subscribe(
+          () => {
+            localStorage.clear();
+            this.snackBar.open('Account deleted successfully.', 'Close', {
+              duration: 3000,
+            });
+            this.router.navigate(['/signup']);
+          },
+          (error) => {
+            console.error(error);
+            this.snackBar.open('Failed to delete account. Try again.', 'Close', {
+              duration: 3000,
+            });
+          }
+        );
+    }
+  }
 }
-
-   // Method to delete user account
-//    deleteAccount(): void {
-//     this.fetchApiData.deleteUser(this.user.username).subscribe(
-//       (resp: any) => {
-//         console.log('Account deleted:', resp);
-//         localStorage.clear();
-//         this.snackBar.open('Account deleted successfully.', 'Close', {
-//           duration: 3000,
-//         });
-//         this.router.navigate(['/welcome']);
-//       },
-//       (error: any) => {
-//         console.error('Error deleting account:', error);
-//         this.snackBar.open('Failed to delete account. Try again.', 'Close', {
-//           duration: 3000,
-//         });
-//       }
-//     );
-// }
-// }

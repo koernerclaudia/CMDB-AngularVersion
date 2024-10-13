@@ -42,7 +42,7 @@
 
 <!-- Part 3: User's Favorite Movies -->
 <h3>Favorite Movies</h3>
-<div *ngIf="favoriteMovies.length === 0">No favorite movies found.</div>
+<div *ngIf="favoriteMovies">No favorite movies found.</div>
 <div *ngFor="let movie of favoriteMovies">
   <app-movie-card [movie]="movie"></app-movie-card>
 </div>
