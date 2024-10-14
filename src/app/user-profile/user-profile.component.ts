@@ -152,33 +152,42 @@ export class UserProfileComponent implements OnInit {
       );
   }
 
-  // Deregister account
-  deleteAccount() {
-    if (confirm('Are you sure you want to delete your account?')) {
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${this.token}`,
-      });
 
-      this.http
-        .delete(
-          `https://cmdb-b8f3cd58963f.herokuapp.com/users/${this.user.username}`,
-          { headers }
-        )
-        .subscribe(
-          () => {
-            localStorage.clear();
-            this.snackBar.open('Account deleted successfully.', 'Close', {
-              duration: 3000,
-            });
-            this.router.navigate(['/signup']);
-          },
-          (error) => {
-            console.error(error);
-            this.snackBar.open('Failed to delete account. Try again.', 'Close', {
-              duration: 3000,
-            });
-          }
-        );
+ // Deregister account
+async deleteAccount() {
+  if (confirm('Are you sure you want to delete your account?')) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    try {
+      // Await the HTTP delete request
+      await this.http
+        .delete(`https://cmdb-b8f3cd58963f.herokuapp.com/users/${this.user.username}`, { headers })
+        .toPromise(); // Convert the Observable to a Promise
+
+      // If the request is successful, log the user out
+      this.logoutUser(); // Call logoutUser to handle logout
+      this.snackBar.open('Account deleted successfully.', 'Close', {
+        duration: 3000,
+      });
+      this.router.navigate(['/signup']); // Redirect after logout
+    } catch (error) {
+      console.error(error);
+      this.snackBar.open('Failed to delete account. Try again.', 'Close', {
+        duration: 3000,
+      });
     }
   }
+}
+
+// Logs the user out of the system and sends them back to the welcome view
+logoutUser(): void {
+  localStorage.clear();
+  this.router.navigate(['welcome']); // routes to the 'movie-card' view
+  this.snackBar.open("You've been logged out", 'OK', {
+    duration: 2000,
+  });
+}
+
 }

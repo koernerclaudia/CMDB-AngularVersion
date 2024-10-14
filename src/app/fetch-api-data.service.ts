@@ -54,7 +54,7 @@ export class FetchApiDataService {
 
   public deleteUser(username: string, token: string): Observable<any> {
     return this.http
-      .delete(`${apiUrl}/users/${username}`, {
+      .delete(`${apiUrl}users/${username}`, {
         headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
       })
       .pipe(catchError(this.handleError));
