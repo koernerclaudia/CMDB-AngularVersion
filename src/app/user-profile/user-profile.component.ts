@@ -14,6 +14,7 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 export class UserProfileComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   movies: any[] = []; // Fetched movie list
+  movieID: string = ''; // Movie ID to be added to favorites
   userForm: FormGroup;
   username: string = '';
   token: string = localStorage.getItem('token') || '';
@@ -36,7 +37,8 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovies();
-    this.loadFavoriteMovies(); // Load user's favorite movies
+    this.loadFavoriteMovies();
+    console.log('User data on init:', this.user);
 
    
     
@@ -50,6 +52,8 @@ export class UserProfileComponent implements OnInit {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp; // Store all movies
       console.log('All Movies:', this.movies); // Debugging log
+    }, error => {
+      console.error('Error fetching all movies:', error);  // Catch errors if fetching fails
     });
   }
 
@@ -142,25 +146,32 @@ logoutUser(): void {
 
 
 loadFavoriteMovies(): void {
+  console.log('Fetching favorite movies for user:', this.user.username); // Debug: Log username
   if (this.user.username) {
     this.fetchApiData.getUserFavoriteMovies(this.user.username).subscribe((resp: any) => {
-      this.favoriteMovies = resp; // Assuming the response is an array of movie IDs
+      this.favoriteMovies = this.movies.filter(movie => resp.includes(movie._id)); // Find full movie details from all movies
+      console.log('Favorite Movies List with Details:', this.favoriteMovies);  // Debug: Check if favoriteMovies now has full movie objects
+    }, error => {
+      console.error('Error fetching favorite movies:', error);  // Catch errors if fetching fails
     });
   }
 }
 
+
+
 removeFromFavorites(movieId: string): void {
   this.fetchApiData.removeMovieFromFavorites(this.user.username, movieId).subscribe((response: any) => {
-    console.log('Movie removed from favorites:', response);
+    console.log('Movie removed from favorites:', response);  // Debugging log
     this.favoriteMovies = this.favoriteMovies.filter(movie => movie._id !== movieId); // Update local state
     this.updateLocalStorageFavorites();
   }, (error: any) => {
-    console.error('Error removing movie from favorites:', error);
+    console.error('Error removing movie from favorites:', error);  // Log error in case it fails
   });
 }
 
 updateLocalStorageFavorites(): void {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  console.log('Updated favorite movies in localStorage:', this.favoriteMovies); // Debugging log
   user.FavoriteMovies = this.favoriteMovies.map(movie => movie._id); // Update with current favorite movie IDs
   localStorage.setItem('user', JSON.stringify(user));
 }

@@ -68,6 +68,11 @@ export class FetchApiDataService {
     );
   }
 
+  public isFavoriteMovie(movieID: string): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.FavoriteMovies.indexOf(movieID) >= 0;
+  }
+
   // Add movie to user’s favorites
   public addMovieToFavorites(username: string, movieID: string): Observable<any> {
     return this.http.post(apiUrl + `users/${username}/movies/${movieID}`, null, { headers: this.getHeaders() }).pipe(
@@ -131,17 +136,17 @@ export class FetchApiDataService {
     return throwError('Something went wrong; please try again later.');
   }
 
-    // Get User's Favorite Movies
-  public getUserFavoriteMovies(username: string): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http
-      .get(apiUrl + `users/${username}/movies`, {
-        headers: new HttpHeaders({ Authorization: 'Bearer ' + token }),
-      })
-      .pipe(catchError(this.handleError));
-  }
-}
 
+// In fetch-api-data.service.ts
+getUserFavoriteMovies(username: string): Observable<any> {
+  const url = `https://cmdb-b8f3cd58963f.herokuapp.com/users/${username}/FavoriteMovies`;
+  return this.http.get(url, {
+    headers: new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    })
+  });
+}
+}
 
 
 // import { Injectable } from '@angular/core';
