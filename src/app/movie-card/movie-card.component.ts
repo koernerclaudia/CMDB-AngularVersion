@@ -141,5 +141,3 @@ export class MovieCardComponent implements OnInit {
     localStorage.setItem('user', JSON.stringify(user));
   }
 }
-
-

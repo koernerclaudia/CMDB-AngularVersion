@@ -5,34 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-welcome-page',
-  // templateUrl: './welcome-page.component.html',
-  template: `
-<div class="main-page">
-  <img class="logo" src="../../assets/images/logo.png" alt="CMDB Logo" />
-   <h3>Welcome to CMDB</h3>
-    <div class="button-container">
-      <button
-      class="custom-button"
-        mat-raised-button
-        (click)="openUserRegistrationDialog()"
-        
-      >
-        Sign Up
-      </button>
-      <button
-      class="custom-button"
-        mat-raised-button
-        (click)="openUserLoginDialog()"
-       
-      >
-        Login
-      </button>
-    </div>
-  </div>`,
-
-
-
-
+  templateUrl: './welcome-page.component.html',
   styleUrls: ['./welcome-page.component.scss']
 })
 export class WelcomePageComponent implements OnInit {
