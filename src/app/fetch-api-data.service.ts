@@ -68,6 +68,11 @@ export class FetchApiDataService {
     );
   }
 
+  public isFavoriteMovie(movieID: string): boolean {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user.FavoriteMovies.indexOf(movieID) >= 0;
+  }
+
   // Add movie to user’s favorites
   public addMovieToFavorites(username: string, movieID: string): Observable<any> {
     return this.http.post(apiUrl + `users/${username}/movies/${movieID}`, null, { headers: this.getHeaders() }).pipe(

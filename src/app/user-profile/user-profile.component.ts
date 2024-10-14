@@ -14,6 +14,7 @@ import { FetchApiDataService } from '../fetch-api-data.service';
 export class UserProfileComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   movies: any[] = []; // Fetched movie list
+  movieID: string = ''; // Movie ID to be added to favorites
   userForm: FormGroup;
   username: string = '';
   token: string = localStorage.getItem('token') || '';
@@ -36,8 +37,9 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.getMovies();
-    this.loadFavoriteMovies(); // Load user's favorite movies
+    this.loadFavoriteMovies();
     console.log('User data on init:', this.user);
+
    
     
   }
@@ -154,6 +156,7 @@ loadFavoriteMovies(): void {
     });
   }
 }
+
 
 
 removeFromFavorites(movieId: string): void {
